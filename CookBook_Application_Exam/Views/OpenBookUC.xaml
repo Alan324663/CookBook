@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="CookBook_Application_Exam.Views.OpenBookUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CookBook_Application_Exam.Views"
+
+             xmlns:models="clr-namespace:CookBook_Application_Exam.Models"
+             mc:Ignorable="d" Background="Beige" FontSize="30"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <models:CookBook/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <local:InverseVisibilityConverter x:Key="InverseVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+       
+        <!-- Assuming OpenBookUC is inside a Grid -->
+        <DockPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <ComboBox ItemsSource="{Binding Cuisines}" MinWidth="200" SelectedValue="{Binding SelectedCuisine}" SelectionChanged="ComboBox_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" MouseLeftButtonDown="CuisineItem_MouseLeftButtonDown"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <Grid x:Name="RecipeContent">
+                <UniformGrid DockPanel.Dock="Top" Columns="3" Rows="3" x:Name="UGRecipeList">
+                    <local:RecipeUC Visibility="Visible" Click="RecipeUC_Click"/>
+                    <!-- This is where dynamically added RecipeUC instances will be placed -->
+                </UniformGrid>
+
+                <local:RecipeDetailUC Visibility="Hidden" x:Name="RecipeDetail"/>
+            </Grid>
+            <Button Content="Go Back" Click="GoBackButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                    Visibility="{Binding ElementName=RecipeDetail, Path=Visibility, Converter={StaticResource InverseVisibilityConverter}}"  />
+        </DockPanel>
+    </Grid>
+</UserControl>
